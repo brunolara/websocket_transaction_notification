@@ -7,8 +7,9 @@ import {SocketController} from './socket'
 
 const app = express();
 const httpServer = createServer(app);
-const port = process.env.port ?? 3000;
 dotenv.config()
+
+const port = process.env.port ?? 3000;
 
 const route = Router();
 const clientList: Client[] = [];
