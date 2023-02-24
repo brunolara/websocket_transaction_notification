@@ -10,11 +10,16 @@ const httpServer = createServer(app);
 dotenv.config()
 
 const port = process.env.port ?? 3000;
+const cors = require('cors');
 
 const route = Router();
 const clientList: Client[] = [];
 
 app.use(express.json());
+
+app.use(cors({
+    origin: '*'
+}));
 
 const io = new Server(httpServer, {
     cors: {
