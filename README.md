@@ -18,7 +18,8 @@
 </script>
 ```
 <h3>body esperado </h3>
-POST /sendNotification
+<h4>POST /sendNotification</h4>
+
 ```json
 {
   "id": "123",
