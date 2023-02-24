@@ -25,7 +25,7 @@ function alreadyRegisteredClient(c: Client, clientList: Client[]){
 
 function isPermittedHostName(hostname: String){
     const permittedHostsList = process.env.hostnames?.split(',').map(item => item.trim()) ?? [];
-    return permittedHostsList.length > 0 ? permittedHostsList.some(item => item === hostname) : true;
+    return permittedHostsList?.length > 0 ? permittedHostsList.some(item => item === hostname) : true;
 }
 
 export  {handleAuth, alreadyRegisteredClient, isPermittedHostName}
