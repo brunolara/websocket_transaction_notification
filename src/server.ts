@@ -7,7 +7,7 @@ import {SocketController} from './socket'
 
 const app = express();
 const httpServer = createServer(app);
-
+const port = process.env.port ?? 3000;
 dotenv.config()
 
 const route = Router();
@@ -30,4 +30,4 @@ io.on("connection", controller.onconnect);
 
 app.use(route)
 
-httpServer.listen(process.env.port ?? 3000);
+httpServer.listen(port, () => console.log("runing on port " + port));
