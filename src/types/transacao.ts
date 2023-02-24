@@ -69,30 +69,30 @@ interface Transacao {
 function toIntegracaoDadosGN(input:any): IntegracaoDadosGerenciaNet | undefined{
     if(input == null || !input) return undefined;
     return {
-        nomePessoa: input.nomePessoa,
-        banco: input.banco,
-        documento: input.documento
+        nomePessoa: input.NomePessoa,
+        banco: input.Banco,
+        documento: input.Documento
     }
 }
 
 function toTransacao(input:any): Transacao | null{
     if(input == null) return null;
     return {
-        id: input.id,
-        valor: input.valor,
-        valorBruto: input.valorBruto,
-        cotacao: input.cotacao,
-        parcelas: input.parcelas,
-        nomeCliente: input.nomeCliente,
-        usuarioId: input.usuarioId,
-        tipoOperacao: input.tipoOperacao,
-        creationDate: input.creationDate,
-        lastModified: input.lastModified,
-        usuarioEstornoNome: input.usuarioEstornoNome,
-        integracaoDadosGN: toIntegracaoDadosGN(input.integracaoDadosGN),
-        vencimento: input.vencimento,
-        nossaCotacao: input.nossaCotacao,
-        statusTransacao: input.statusTransacao
+        id: input.Id,
+        valor: input.Valor,
+        valorBruto: input.ValorBruto,
+        cotacao: input.Cotacao,
+        parcelas: input.Parcelas,
+        nomeCliente: input.NomeCliente,
+        usuarioId: input.UsuarioId,
+        tipoOperacao: input.TipoOperacao,
+        creationDate: input.CreationDate,
+        lastModified: input.LastModified,
+        usuarioEstornoNome: input.UsuarioEstornoNome,
+        integracaoDadosGN: toIntegracaoDadosGN(input.IntegracaoDadosGN),
+        vencimento: input.Vencimento,
+        nossaCotacao: input.NossaCotacao,
+        statusTransacao: input.StatusTransacao
     }
 }
 
