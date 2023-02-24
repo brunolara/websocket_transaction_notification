@@ -2,7 +2,7 @@ import {Server, Socket} from "socket.io";
 import {DisconnectReason} from "socket.io/dist/socket";
 import Client from "../types/client";
 import {alreadyRegisteredClient, handleAuth, isPermittedHostName} from "./helper";
-import {StatusTransacaoEnum, Transacao} from "../types/transacao";
+import {StatusTransacaoEnum, toTransacao, Transacao} from "../types/transacao";
 import {Request, Response} from "express";
 import {TransactionSocketEvents} from "../types/transaction_socket_events";
 import {SocketHttpResponseMessages} from "../types/socket_http_response_messages";
@@ -22,7 +22,6 @@ class SocketController{
         this.socket = socket;
         const token: string = (this.socket.handshake.query?.token ?? "").toString();
         this.client = handleAuth(token);
-
         if(this.client !== null && !alreadyRegisteredClient(this.client, this.clientList)) {
             this.client.socketId = this.socket.id;
             this.clientList.push(this.client);
@@ -37,7 +36,7 @@ class SocketController{
     }
 
     emit = (ev:string, to: string, message: string): boolean => {
-        try{
+        try {
             return this.server.to(to).emit(ev, message);
         } catch (e){
             return false;
@@ -46,7 +45,7 @@ class SocketController{
 
     handleNotification = (req: Request, res: Response) => {
         if(!isPermittedHostName(req.hostname)) return res.sendStatus(403);
-        const t: Transacao | null = req.body?.transacao;
+        const t: Transacao | null = toTransacao(req.body);
         let returnStatus = 200;
         let returnMessage: SocketHttpResponseMessages = SocketHttpResponseMessages.nobodyToHear;
         if(t != null ) {
@@ -65,6 +64,9 @@ class SocketController{
                 returnMessage = returnStatus == 200 ?
                     SocketHttpResponseMessages.somebodyHeared : SocketHttpResponseMessages.error;
             }
+        } else {
+            returnStatus = 422;
+            returnMessage = SocketHttpResponseMessages.nullableTransaction;
         }
         return res.status(returnStatus).json({message: returnMessage});
     }

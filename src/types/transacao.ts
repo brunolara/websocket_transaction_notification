@@ -1,5 +1,4 @@
 enum TipoOperacao {
-
     BOLETO = 1,
     CARTAO_DEBITO = 2,
     CARTAO_CREDITO = 3,
@@ -54,48 +53,47 @@ interface Transacao {
     valor: number;
     valorBruto: number;
     cotacao?: number;
-    nossoNumero?: string;
-    codigoDeBarra?: string;
-    linhaDigitavel?: string;
-    documento?: string;
     parcelas?: number;
     nomeCliente?: string;
     usuarioId: number;
-    usuarioNome: string;
-    estabelecimentoId?: number;
-    pixChavePagamento?: string;
-    pixEndToEnd?: string;
     tipoOperacao?: TipoOperacao;
-    statusTransacao?: StatusTransacaoEnum;
-    adquirenteStatusCode?: string;
-    estabelecimentoRazaoSocial?: string;
-    estabelecimentoNomeFantasia?: string;
-    estabelecimentoCnpj?: string;
     creationDate?: Date;
     lastModified?: Date;
-    categoria?: string;
     usuarioEstornoNome?: string;
-    urlImagemComprovante?: string;
-    urlDocumentoFrente?: string;
-    urlDocumentoVerso?: string;
-    urlAssinatura?: string;
-    valorTaxaAdquirente?: number;
-    confirmadoManualmente?: boolean;
     integracaoDadosGN?: IntegracaoDadosGerenciaNet;
-    tokenFoto?: string;
-    hashId?: string;
-    avaliadorId?: number;
-    dataAvaliacao?: Date;
-    motivoAvaliacao?: string;
-    empresaRequerDocumento?: boolean;
-    transacaoId?: number;
-    pagamentoId?: number;
-    valorDisponivelSplit?: number;
-    empresaRequerComprovante?: boolean;
-    empresaRequerAssinatura?: boolean;
-    respostaAdquirente?: string;
     vencimento?: Date;
     nossaCotacao?: number;
+    statusTransacao: StatusTransacaoEnum;
 }
 
-export {Transacao, StatusTransacaoEnum}
+function toIntegracaoDadosGN(input:any): IntegracaoDadosGerenciaNet | undefined{
+    if(input == null || !input) return undefined;
+    return {
+        nomePessoa: input.nomePessoa,
+        banco: input.banco,
+        documento: input.documento
+    }
+}
+
+function toTransacao(input:any): Transacao | null{
+    if(input == null) return null;
+    return {
+        id: input.id,
+        valor: input.valor,
+        valorBruto: input.valorBruto,
+        cotacao: input.cotacao,
+        parcelas: input.parcelas,
+        nomeCliente: input.nomeCliente,
+        usuarioId: input.usuarioId,
+        tipoOperacao: input.tipoOperacao,
+        creationDate: input.creationDate,
+        lastModified: input.lastModified,
+        usuarioEstornoNome: input.usuarioEstornoNome,
+        integracaoDadosGN: toIntegracaoDadosGN(input.integracaoDadosGN),
+        vencimento: input.vencimento,
+        nossaCotacao: input.nossaCotacao,
+        statusTransacao: input.statusTransacao
+    }
+}
+
+export {Transacao, StatusTransacaoEnum, toTransacao}

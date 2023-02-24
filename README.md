@@ -17,3 +17,28 @@
 
 </script>
 ```
+<h3>body esperado </h3>
+POST /sendNotification
+```json
+{
+  "id": "123",
+  "valor": 30,
+  "valorBruto": 40,
+  "cotacao": null,
+  "parcelas": 1,
+  "nomeCliente": "Ronaldo Silva",
+  "usuarioId": "123",
+  "tipoOperacao": "4",
+  "creationDate": "2023-02-23T16:38:32",
+  "lastModified": "2023-02-23T16:38:32",
+  "usuarioEstornoNome": "",
+  "integracaoDadosGN": {
+    "nomePessoa": "CASSIO",
+    "banco": "Não Informado",
+    "documento": "01234567"
+  },
+  "vencimento": "2023-01-01",
+  "nossaCotacao": 5.2577,
+  "statusTransacao": 19
+}
+```
