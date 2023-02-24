@@ -25,6 +25,7 @@ class SocketController{
         if(this.client !== null && !alreadyRegisteredClient(this.client, this.clientList)) {
             this.client.socketId = this.socket.id;
             this.clientList.push(this.client);
+            console.log(`${this.client.NomeUsuario} conectado`);
         }
         this.socket.on("disconnect", this.ondisconnect)
     }
@@ -32,6 +33,7 @@ class SocketController{
     ondisconnect =  (reason: DisconnectReason) => {
         if(this.client !== null && alreadyRegisteredClient(this.client, this.clientList)){
             this.clientList = this.clientList.filter(item => item.socketId !== this.client?.socketId);
+            console.log(`${this.client.NomeUsuario} desconectado`);
         }
     }
 
@@ -49,6 +51,7 @@ class SocketController{
         let returnStatus = 200;
         let returnMessage: SocketHttpResponseMessages = SocketHttpResponseMessages.nobodyToHear;
         if(t != null ) {
+            console.log(`Transação id: ${t.id} recebida, tentando comunicar o ${t.usuarioId}`)
             const to = this.clientList.find(item => item.UsuarioId === t.usuarioId);
             let eventName: TransactionSocketEvents = TransactionSocketEvents.statusChange;
             if(to) {
