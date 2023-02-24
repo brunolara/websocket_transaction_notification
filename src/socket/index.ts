@@ -46,7 +46,7 @@ class SocketController{
     }
 
     handleNotification = (req: Request, res: Response) => {
-        if(!isPermittedHostName(req.hostname)) return res.sendStatus(403);
+      //  if(!isPermittedHostName(req.hostname)) return res.sendStatus(403);
         const t: Transacao | null = toTransacao(req.body);
         let returnStatus = 200;
         let returnMessage: SocketHttpResponseMessages = SocketHttpResponseMessages.nobodyToHear;
