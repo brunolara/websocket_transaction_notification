@@ -22,7 +22,7 @@ class SocketController{
         this.socket = socket;
         const token: string = (this.socket.handshake.query?.token ?? "").toString();
         this.client = handleAuth(token);
-        if(this.client !== null && !alreadyRegisteredClient(this.client, this.clientList)) {
+        if(this.client !== null) {
             this.client.socketId = this.socket.id;
             this.clientList.push(this.client);
             console.log(`${this.client.NomeUsuario} conectado`);
@@ -31,7 +31,7 @@ class SocketController{
     }
 
     ondisconnect =  (reason: DisconnectReason) => {
-        if(this.client !== null && alreadyRegisteredClient(this.client, this.clientList)){
+        if(this.client !== null){
             this.clientList = this.clientList.filter(item => item.socketId !== this.client?.socketId);
             console.log(`${this.client.NomeUsuario} desconectado`);
         }
@@ -52,9 +52,10 @@ class SocketController{
         let returnMessage: SocketHttpResponseMessages = SocketHttpResponseMessages.nobodyToHear;
         if(t != null ) {
             console.log(`Transação id: ${t.id} recebida, tentando comunicar o ${t.usuarioId}`)
-            const to = this.clientList.find(item => item.UsuarioId === t.usuarioId);
+            const toList = this.clientList.filter(item => item.UsuarioId === t.usuarioId);
             let eventName: TransactionSocketEvents = TransactionSocketEvents.statusChange;
-            if(to) {
+            if(toList.length) {
+
                 switch (t.statusTransacao) {
                     case StatusTransacaoEnum.CONFIRMADO:
                         eventName = TransactionSocketEvents.payed;
@@ -63,8 +64,8 @@ class SocketController{
                         eventName = TransactionSocketEvents.chargeBack;
                         break;
                 }
-                returnStatus = this.emit(eventName, to.socketId, JSON.stringify(t)) ? 200 : 500;
-                returnMessage = returnStatus == 200 ?
+                returnStatus = toList.map(to => this.emit(eventName, to.socketId, JSON.stringify(t))).every(item => item) ? 200 : 500;
+                returnMessage = returnStatus ?
                     SocketHttpResponseMessages.somebodyHeared : SocketHttpResponseMessages.error;
             }
         } else {
